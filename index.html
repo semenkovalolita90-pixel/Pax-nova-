@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#b5472b"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Pax Nova"><title>Pax Nova — альтернативная история</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f3efe6;--cd:#fffdf8;--tx:#1f2430;--mu:#6b7080;--sea:#bdd6e8;--ac:#b5472b;--bd:#ddd5c4}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#12161d;--cd:#1b212c;--tx:#e9e7e0;--mu:#9aa1af;--sea:#17293a;--ac:#e8794f;--bd:#2c3442}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#12161d;--cd:#1b212c;--tx:#e9e7e0;--mu:#9aa1af;--sea:#17293a;--ac:#e8794f;--bd:#2c3442}
+*,*:before,*:after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+#app{max-width:760px;margin:0 auto;padding:12px}
+header{display:flex;justify-content:space-between;align-items:center;gap:8px}
+h1{font:700 20px/1.2 Georgia,"Times New Roman",serif;margin:0}
+.mu{color:var(--mu);font-size:13px}
+#vp{position:relative;overflow:hidden;border-radius:10px;border:1px solid var(--bd);margin:10px 0;touch-action:pan-y;background:var(--sea);height:min(62vh,540px);min-height:260px}#map{display:block;width:100%;height:100%}.zb{position:absolute;right:8px;top:8px;display:flex;flex-direction:column;gap:6px}.zb button{width:34px;height:34px;border-radius:8px;border:1px solid var(--bd);background:var(--cd);font-size:20px;line-height:1}.inp{width:100%;margin-top:8px;font-size:16px;background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:8px}
+.card{background:var(--cd);border:1px solid var(--bd);border-radius:12px;padding:12px;margin:10px 0}
+.card h3{margin:2px 0 6px;font-size:16px}.card p{margin:4px 0}.card ul{margin:6px 0;padding-left:18px}
+.tr{margin-top:6px;font-size:13px;color:var(--ac)}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px}
+button,textarea,select{font:inherit;color:var(--tx)}
+.btn{background:var(--ac);color:#fff;border:0;border-radius:10px;padding:11px 14px;font-weight:600;width:100%;margin-top:8px}
+.btn:disabled{opacity:.6}
+.sm{background:transparent;border:1px solid var(--bd);border-radius:8px;padding:5px 9px;font-size:13px}
+textarea{width:100%;min-height:76px;font-size:16px;background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:8px;resize:vertical}
+select{background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:8px;font-size:15px}
+#list{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.it{background:var(--bg);border:1px solid var(--bd);border-radius:999px;padding:5px 10px;font-size:13px}
+.it small{color:var(--mu);margin-left:5px}.it.on{border-color:var(--ac)}
+.row{display:flex;align-items:center;font-size:17px}
+.tag{font-size:11px;background:var(--ac);color:#fff;border-radius:6px;padding:1px 6px;margin-left:6px}
+#chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.pr{display:flex;gap:8px;align-items:center;margin-top:8px}
+.msgs{max-height:260px;overflow:auto;display:flex;flex-direction:column;gap:6px;margin:8px 0}.m{padding:8px 10px;border-radius:12px;max-width:94%;font-size:14px;background:var(--bg);border:1px solid var(--bd)}.m.u{align-self:flex-end;background:var(--ac);color:#fff;border-color:transparent}.ins{display:block;margin:4px 0;text-align:left}.inp.f{flex:1;margin:0;min-width:0}
+#sc h2{font:700 19px/1.2 Georgia,serif;margin:14px 0 2px}#sc h3{font-size:13px;color:var(--mu);margin:16px 0 6px;text-transform:uppercase;letter-spacing:.05em}
+.scc{display:flex;flex-direction:column;gap:4px;text-align:left;width:100%;background:var(--cd);border:1px solid var(--bd);border-radius:12px;padding:12px;margin:0 0 8px}.scc:disabled{opacity:.5}.scc b{font-size:16px}
+.yr{align-self:flex-start;font:700 12px system-ui,sans-serif;background:var(--tx);color:var(--bg);border-radius:6px;padding:1px 8px}
+.tp{font-size:11px;border-radius:6px;padding:2px 8px;background:var(--bd)}.tp.alt{background:var(--ac);color:#fff}
+</style>
+<script>var WD;window.jsVectorMap={maps:{},addMap:function(n,d){WD=d}}</script>
+<script src="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/maps/world.js"></script>
+</head><body><div id="app">
+<header><div><h1>Pax Nova</h1><div class="mu"><span id="date"></span> · <span id="ai"></span> · <span id="mt">карта…</span></div></div><button class="sm" id="new">Сюжеты</button></header>
+<section id="sc"><h2>Выберите сюжет</h2><p class="mu">Реальные эпохи или альтернативные истории — у каждого сюжета свой стартовый мир.</p><div id="scl"><p class="mu">Загружаю карту мира…</p></div></section>
+<div id="game" hidden><div class="card" id="brief"></div>
+<div id="vp"><canvas id="map"></canvas><div class="zb"><button id="zi">+</button><button id="zo">−</button></div></div>
+<div class="card" id="info">Загружаю карту мира…</div>
+<div class="card" id="ctl" hidden>
+<b>Ваши приказы</b>
+<div id="chips"></div>
+<textarea id="ord" placeholder="Например: заключить союз с соседями, мобилизовать армию, начать реформы…"></textarea>
+<div class="pr"><span class="mu">Ход:</span><select id="per"><option value="1">1 месяц</option><option value="3">3 месяца</option><option value="12">1 год</option></select></div>
+<button class="btn" id="go">Завершить ход</button>
+</div>
+<div class="card" id="adv" hidden>
+<div style="display:flex;justify-content:space-between;align-items:center"><b>🧭 Советник</b><button class="sm" id="ah">Скрыть</button></div>
+<div id="ab"><div class="msgs" id="am"></div>
+<div class="pr"><button class="sm" id="a1">Что делать?</button><button class="sm" id="a2">Сводка игры</button></div>
+<div class="pr"><input class="inp f" id="aq" placeholder="Спросить советника…"><button class="sm" id="as">Спросить</button></div></div>
+</div>
+<div id="log"></div>
+<div class="card" id="lc"><div style="display:flex;justify-content:space-between;align-items:center"><b id="lt">Страны</b><button class="sm" id="lh">Скрыть</button></div><div id="lb"><input class="inp" id="q" placeholder="Найти страну…"><div id="list"></div></div></div>
+</div>
+<p class="mu" style="text-align:center">Границы стран: Natural Earth</p>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+const RLE=["12.4#1.5#5.2#4.2#13.","3.3#1.15#4.22#","2.9#2.10#1.24#","3.8#2.4#6.25#","7.10#6.21#4.","8.9#6.5#1.1#1.10#1.1#5.","8.7#8.2#3.13#1.1#5.","8.7#7.19#7.","9.6#7.10#1.8#7.","13.5#4.10#2.1#2.2#9.","14.5#3.10#4.2#1.2#7.","14.6#5.5#6.2#1.3#1.4#1.","13.7#5.5#8.2#3.2#3.","14.6#5.4#1.1#8.7#2.","14.5#6.4#10.7#2.","14.3#9.3#10.7#2.","14.2#27.2#2.1#","14.2#30.1#1.","14.1#33."];
+const NAT="США:11,7,3,3;Канада:10,3;Мексика:10,9;Колумбия:14,11;Перу:14,13;Бразилия:17,12;Аргентина:15,16;Дания:19,2;Скандинавия:26,3;Великобритания:23,4;Франция:24,5;Германия:26,5;Испания:23,6;Италия:26,6;Турция:29,6;Украина:28,5;Россия:31,3,39,3;Казахстан:32,5;Египет:28,8;Алжир:24,8;Нигерия:24,10;Эфиопия:29,10;ДР Конго:27,12;ЮАР:27,16;Саудовская Аравия:30,8;Иран:31,7;Пакистан:33,8;Индия:35,9;Китай:38,7;Индокитай:38,9;Индонезия:37,12,40,11;Япония:42,7;Корея:40,6;Австралия:42,15";
+let scn=null,ownBase,nameBase,CI={},HAS=[],N=[],own,own0,W=48,H=19,pal=[],me=null,sel=null,y=2026,m=0,log=[],hist=[],chat=[],share0=0,ai=null,mapNote="",K=new Int32Array(1),CX=[],CY=[],cap=null,img=null,SC=[200,215,230],RR=1,rq=0,busy=false;
+const byName={},V={x:0,y:0,s:0},vp=$("vp"),cv=$("map"),ctx=cv.getContext("2d");
+const MN=["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const dateStr=()=>MN[m]+" "+y,cnt=()=>K,rgb=i=>"rgb("+pal[i]+")",pc=(a,t)=>{const v=a/t*100;return v<.1?"<0.1":v.toFixed(1)};
+const find=s=>{s=String(s||"").toLowerCase().trim();if(byName[s]!==undefined)return byName[s];if(s.length<4)return;const n=N.find(n=>HAS[n.i]&&(n.name.toLowerCase().includes(s)||s.includes(n.name.toLowerCase())));return n&&n.i};
+function hsl(h,s,l){const a=s*Math.min(l,1-l),f=n=>{const k=(n+h/30)%12;return Math.round(255*(l-a*Math.max(-1,Math.min(k-3,9-k,1))))};return[f(0),f(8),f(4)]}
+
+const load=u=>new Promise(r=>{const e=document.createElement("script");e.src=u;e.onload=()=>r(1);e.onerror=()=>r(0);document.head.appendChild(e)});
+let dn;try{dn=new Intl.DisplayNames(["ru"],{type:"region",fallback:"none"})}catch(e){}
+const nm=(c,f)=>{try{return dn&&dn.of(c)||f}catch(e){return f}};
+function build(items,w,h){
+ W=w;H=h;const cc=document.createElement("canvas");cc.width=W;cc.height=H;const g=cc.getContext("2d",{willReadFrequently:true});
+ items.sort((a,b)=>b.wt-a.wt);N=items.map((t,i)=>({i,name:nm(t.code,t.name),code:String(t.code||"").toUpperCase()}));
+ items.forEach((t,i)=>{const r=(i+1)&255,q=(i+1)>>8;g.fillStyle=`rgb(${r},${q},${(r*7+q*13)&255})`;try{t.draw(g)}catch(e){}});
+ const d=g.getImageData(0,0,W,H).data;own=new Int16Array(W*H).fill(-1);const bad=[];
+ for(let p=0;p<W*H;p++){if(d[p*4+3]<100)continue;const r=d[p*4],q=d[p*4+1],id=r+(q<<8);if(d[p*4+2]===((r*7+q*13)&255)&&id>=1&&id<=N.length)own[p]=id-1;else bad.push(p)}
+ for(let t=0;t<2;t++)for(const p of bad)if(own[p]<0)for(const q of[p-1,p+1,p-W,p+W])if(q>=0&&q<W*H&&own[q]>=0){own[p]=own[q];break}
+}
+function amItems(F,w){const X=lo=>(lo+180)/360*w,my=p=>1.25*Math.log(Math.tan(Math.PI/4+.4*p*Math.PI/180)),Y0=my(84),Y1=my(-56.5),h=Math.round(w*(Y0-Y1)/(2*Math.PI)),Y=la=>(Y0-my(la))/(Y0-Y1)*h;
+ const items=F.features.filter(f=>f.geometry&&(f.id||f.properties.id)!=="AQ").map(f=>{const P=f.geometry.type==="Polygon"?[f.geometry.coordinates]:f.geometry.coordinates;let wt=0;P.forEach(p=>p.forEach(r=>wt+=r.length));
+  return{code:f.id||f.properties.id,name:f.properties.name||"",wt,draw(g){g.beginPath();for(const p of P)for(const r of p){r.forEach(([lo,la],j)=>j?g.lineTo(X(lo),Y(la)):g.moveTo(X(lo),Y(la)));g.closePath()}g.fill("evenodd")}}});
+ return{items,h}}
+function jvItems(){const P=WD.paths||(WD.insets&&WD.insets[0].paths),WW=WD.width||900,HH=WD.height||(WD.insets&&WD.insets[0].height)||440,w=720,h=Math.round(HH*w/WW);
+ return{h,items:Object.keys(P).filter(c=>c!=="AQ"&&P[c].path).map(c=>({code:c,name:P[c].name||c,wt:P[c].path.length,draw(g){g.save();g.scale(w/WW,h/HH);g.fill(new Path2D(P[c].path),"evenodd");g.restore()}}))}}
+function coarse(){
+ mapNote="упрощённая карта";W=48;H=RLE.length;
+ N=NAT.split(";").map((s,i)=>{const[n,p]=s.split(":"),a=p.split(",").map(Number),sd=[];for(let k=0;k<a.length;k+=2)sd.push([a[k],a[k+1]-1]);return{i,name:n,sd}});
+ own=new Int16Array(W*H).fill(-1);
+ RLE.forEach((r,yy)=>{let x=0;r.replace(/(\d+)([.#])/g,(_,n,c)=>{for(let j=0;j<+n;j++,x++)if(c==="#"){let b=0,bd=1e9;N.forEach(t=>t.sd.forEach(([sx,sy])=>{const e=(x-sx)**2+(yy-sy)**2;if(e<bd){bd=e;b=t.i}}));own[yy*W+x]=b}})});
+}
+
+async function boot(){
+ let ok=false;const W0=(navigator.deviceMemory||8)<4?1500:2000,B="https://cdn.jsdelivr.net/npm/@amcharts/amcharts4-geodata@4.1.28/";
+ for(const u of[B+"worldHigh.js",B+"dist/script/worldHigh.js"]){if(ok)break;window.exports={};
+  if(await load(u)){const F=window.am4geodata_worldHigh||window.exports.am4geodata_worldHigh||window.exports.default;if(F&&F.features){try{const a=amItems(F,W0);build(a.items,W0,a.h);ok=N.length>50}catch(e){}}}
+  delete window.exports}
+ if(!ok&&WD){try{const a=jvItems();build(a.items,720,a.h);ok=N.length>50;mapNote="средняя детализация"}catch(e){}}
+ if(!ok)coarse();
+ own0=Int16Array.from(own);N.forEach(n=>byName[n.name.toLowerCase()]=n.i);pal=N.map((_,i)=>hsl((i*137.5)%360,.5+(i%3)*.08,.58-(i%2)*.08));
+ const sv=getComputedStyle(document.documentElement).getPropertyValue("--sea").trim();if(sv){ctx.fillStyle=sv;ctx.fillRect(0,0,1,1);SC=Array.from(ctx.getImageData(0,0,1,1).data)}
+ ownBase=Int16Array.from(own);nameBase=N.map(n=>n.name);CI={};N.forEach(n=>{if(n.code)CI[n.code]=n.i});$("mt").textContent=mapNote||"реальные границы";menu();
+ if("ResizeObserver"in window)new ResizeObserver(()=>size()).observe(vp);else addEventListener("resize",size)}
+const SP=s=>s.split(" ");
+const BR=SP("CA AU NZ ZA IN PK BD LK MM MY SG BN CY KW QA BH AE OM EG SD SS KE UG NG GH SL GM ZM ZW MW BW LS SZ MU SC GY BZ FJ SB VU"),BRM=SP("IQ JO IL PS NA TZ"),FRA=SP("DZ TN MA ML MR NE TD SN GN CI BF BJ GA CG CF MG DJ KM"),FRI=SP("VN LA KH"),FRM=SP("SY LB TG CM"),PTc=SP("AO MZ GW CV ST TL"),SUm=SP("UA BY MD LT LV EE GE AM AZ KZ UZ TM KG TJ"),YU=SP("HR SI BA ME MK XK");
+const G14=[["Российская империя","RU",[...SUm,"FI","PL"]],["Австро-Венгрия","AT",SP("HU CZ SK SI HR BA")],["Германская империя","DE",SP("TG CM NA TZ RW BI PG")],["Британская империя","GB",["IE",...BR]],["Франция","FR",[...FRA,...FRI]],["Османская империя","TR",SP("SY LB IL JO PS IQ SA YE")],["Италия","IT",SP("LY ER SO")],["Испания","ES",SP("EH GQ")],["Бельгия","BE",["CD"]],["Нидерланды","NL",SP("ID SR")],["Португалия","PT",PTc],["Дания","DK",SP("GL IS")],["США","US",SP("PR PH")],["Япония","JP",SP("KR KP TW")],["Китай","CN",["MN"]],["Сербия","RS",SP("XK MK")]];
+const G39=[["СССР","RU",SP("UA BY GE AM AZ KZ UZ TM KG TJ MN")],["Румыния","RO",["MD"]],["Третий рейх","DE",SP("AT CZ")],["Британская империя","GB",[...BR,...BRM]],["Франция","FR",[...FRA,...FRI,...FRM]],["Италия","IT",SP("LY ER SO ET AL")],["Япония","JP",SP("KR KP TW")],["Испания","ES",SP("EH GQ")],["Бельгия","BE",SP("CD RW BI")],["Нидерланды","NL",SP("ID SR")],["Португалия","PT",PTc],["США","US",SP("PR PH")],["Дания","DK",SP("GL IS")],["Югославия","RS",YU]];
+const G62=[["СССР","RU",SUm],["Югославия","RS",YU],["Чехословакия","CZ",["SK"]],["Пакистан","PK",["BD"]],["Британская империя","GB",SP("KE UG ZM ZW MW BW LS SZ MU SC MY SG BN BH QA AE OM GY BZ FJ")],["Франция","FR",SP("DZ DJ KM")],["Португалия","PT",PTc],["Испания","ES",SP("EH GQ")],["Нидерланды","NL",["SR"]]];
+const GCO=[["Британская империя","GB",[...BR,...BRM]],["Французская империя","FR",[...FRA,...FRI,...FRM]],["Итальянская империя","IT",SP("LY ER SO ET AL")],["Испанская империя","ES",SP("EH GQ")],["Бельгийская империя","BE",SP("CD RW BI")],["Нидерландская империя","NL",SP("ID SR")],["Португальская империя","PT",PTc]];
+const SCN=[
+{t:"Современный мир",yr:"2026",kind:"real",y:2026,m:9,blurb:"Октябрь 2026: нынешние границы и расстановка сил.",brief:"Октябрь 2026 года. Мир многополярен: США и Китай соперничают за технологии и влияние, в нескольких регионах идут конфликты, а санкции и торговые блоки стали оружием не слабее армий. Вы — глава одного из государств и сами решаете, как распорядиться его силой.",ctx:"Старт — реальный мир октября 2026 года: современные страны, границы, технологии и лидеры."},
+{t:"Июль 1914: накануне Великой войны",yr:"1914",kind:"real",y:1914,m:6,blurb:"Сараево, союзы великих держав и колониальные империи.",brief:"28 июня 1914 года в Сараеве убит наследник австро-венгерского престола Франц Фердинанд. Европа разделена на Антанту (Франция, Россия, Британия) и Тройственный союз (Германия, Австро-Венгрия, Италия). Империи делят Африку и Азию, генштабы готовят мобилизацию, а дипломаты надеются погасить кризис. От ваших решений зависит, вспыхнет ли большая война.",ctx:"Эпоха: июль 1914. Исходи из реальной истории: Июльский кризис, системы союзов, колониальные империи; лидеры эпохи (Вильгельм II, Николай II, Франц Иосиф, Пуанкаре, Георг V, Вильсон). Технологии: железные дороги, телеграф, пулемёты, дредноуты; нет ядерного оружия и интернета. «Российская империя» — Россия, Украина, Беларусь, Прибалтика, Польша, Финляндия, Кавказ, Средняя Азия; «Австро-Венгрия» — Австрия, Венгрия, Чехия, Словакия, Словения, Хорватия, Босния.",g:G14},
+{t:"Август 1939: на пороге мировой войны",yr:"1939",kind:"real",y:1939,m:7,blurb:"Пакт с Германией, Мюнхен и кризис вокруг Польши.",brief:"Август 1939 года. Германия присоединила Австрию и захватила Чехию, Италия заняла Албанию и Эфиопию, Япония воюет в Китае. Британия и Франция дали гарантии Польше, а СССР только что подписал пакт с Германией. До начала большой войны остаются считаные дни — и у вас есть шанс изменить её ход.",ctx:"Эпоха: август 1939. Реальная история до даты: Мюнхен, аншлюс, пакт Молотова — Риббентропа, война Японии в Китае. Лидеры: Гитлер, Сталин, Чемберлен, Даладье, Рузвельт, Муссолини, Хирохито, Чан Кайши. Технологии: танки, авиация, радио; ядерного оружия нет. «Третий рейх» — Германия, Австрия, Чехия; «СССР» — Россия, Украина, Беларусь, Кавказ, Средняя Азия и Монголия (приближённо).",g:G39},
+{t:"Октябрь 1962: Карибский кризис",yr:"1962",kind:"real",y:1962,m:9,blurb:"Советские ракеты на Кубе, мир на грани ядерной войны.",brief:"Октябрь 1962 года. Американская разведка обнаружила советские ракеты на Кубе, и США объявили морскую блокаду острова. СССР и США стоят на грани ядерной войны; Европу разделяет Берлинская стена, в Азии тлеют войны, а колониальные империи доживают последние годы. Один неверный шаг — и мир изменится навсегда.",ctx:"Эпоха: октябрь 1962, холодная война. Лидеры: Кеннеди, Хрущёв, Кастро, Мао, де Голль, Макмиллан, Неру. Есть ядерное оружие и ракеты, нет интернета. «СССР» — все 15 союзных республик; «Югославия» и «Чехословакия» — единые страны; Германия показана одной страной (ФРГ и ГДР не разделены на карте); Пакистан включает Бангладеш.",g:G62},
+{t:"СССР не распался",yr:"Альт. 2026",kind:"alt",y:2026,m:9,blurb:"Путч 1991 года провалился, Союз дожил до наших дней.",brief:"Альтернативная история. В августе 1991 года путч ГКЧП провалился, а Горбачёв подписал новый Союзный договор: СССР стал обновлённой федерацией с рыночной экономикой. Холодная война закончилась без явного победителя. В октябре 2026 года Союз остаётся огромной державой из 15 республик с ядерным арсеналом, но национальные движения, неравенство регионов и соперничество с США и Китаем держат его в напряжении.",ctx:"Альтернативная история: СССР сохранился как реформированная федерация из 15 республик; остальной мир развивался примерно как в реальности. «СССР» — Россия, Украина, Беларусь, Молдова, Прибалтика, Закавказье и Средняя Азия.",g:[["СССР","RU",SUm]]},
+{t:"Мир империй",yr:"Альт. 2026",kind:"alt",y:2026,m:9,blurb:"Деколонизации не было: колониальные империи живы.",brief:"Альтернативная история. После Второй мировой Лондон, Париж, Лиссабон, Брюссель, Гаага, Рим и Мадрид удержали колонии: уступки местным элитам, подавленные восстания и «имперские федерации» остановили деколонизацию. В 2026 году мир поделён между огромными империями, но национальные движения Индии, Африки и Юго-Восточной Азии становятся всё сильнее, а другие державы поддерживают их ради своих целей.",ctx:"Альтернативная история: деколонизации не было; существуют Британская империя (с доминионами, Индией и Африкой), Французская, Итальянская, Испанская, Бельгийская, Нидерландская и Португальская империи; остальные страны — как в реальности, дата — октябрь 2026.",g:GCO},
+{t:"Европейская Федерация",yr:"Альт. 2026",kind:"alt",y:2026,m:9,blurb:"Евросоюз стал единым государством с общей армией.",brief:"Альтернативная история. После кризисов 2010-х страны Евросоюза пошли на политический союз: единое правительство, армия и бюджет. В октябре 2026 года Европейская Федерация — одна из крупнейших экономик мира, но соседи смотрят на неё с опаской, а внутри спорят национальные элиты и регионы.",ctx:"Альтернативная история: страны ЕС объединились в единую федерацию (Германия, Франция, Италия, Испания, Польша и остальные члены ЕС); остальной мир — как в реальности, дата — октябрь 2026.",g:[["Европейская Федерация","DE",SP("AT BE BG HR CY CZ DK EE FI FR GR HU IE IT LV LT LU MT NL PL PT RO SK SI ES SE")]]}
+];
+function scList(){const ok=Object.keys(CI).length>0,row=k=>{const S=SCN[k],off=S.g&&!ok;return `<button class="scc" data-k="${k}"${off?" disabled":""}><span class="yr">${esc(S.yr)}</span><b>${esc(S.t)}</b><span class="mu">${esc(S.blurb)}${off?" (нужна подробная карта)":""}</span></button>`},part=kd=>SCN.map((_,k)=>k).filter(k=>SCN[k].kind===kd).map(row).join("");
+ $("scl").innerHTML="<h3>Реальные эпохи</h3>"+part("real")+"<h3>Альтернативные истории</h3>"+part("alt")}
+$("scl").onclick=e=>{const b=e.target.closest(".scc");if(b&&!b.disabled)startScenario(+b.dataset.k)};
+function menu(){scList();$("game").hidden=true;$("sc").hidden=false;scrollTo(0,0)}
+function startScenario(k){const S=SCN[k];scn=S;N.forEach((n,i)=>n.name=nameBase[i]);own.set(ownBase);
+ const rm=Int16Array.from(N,(_,i)=>i);
+ for(const[name,host,mem]of S.g||[]){const h=CI[host];if(h==null)continue;N[h].name=name;for(const c of mem){const i=CI[c];if(i!=null)rm[i]=h}}
+ for(let p=0;p<own.length;p++)if(own[p]>=0)own[p]=rm[own[p]];
+ own0=Int16Array.from(own);HAS=new Uint8Array(N.length);for(let p=0;p<own.length;p++)if(own[p]>=0)HAS[own[p]]=1;
+ for(const n in byName)delete byName[n];N.forEach(n=>{if(HAS[n.i])byName[n.name.toLowerCase()]=n.i});
+ $("sc").hidden=true;$("game").hidden=false;size();reset();showBrief();scrollTo(0,0)}
+function showBrief(){const S=scn;$("brief").innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span class="tp ${S.kind}">${S.kind==="alt"?"Альтернативная история":"Реальная история"}</span><button class="sm" id="bh">Скрыть</button></div><h3>${esc(S.t)}</h3><div id="bb"><p class="mu">${esc(dateStr())}</p><p>${esc(S.brief)}</p>${S.g&&S.kind==="real"?'<p class="mu">Карта собрана из современных государств, поэтому состав и границы держав эпохи показаны приблизительно.</p>':""}</div>`;
+ $("bh").onclick=()=>{$("bb").hidden=!$("bb").hidden;$("bh").textContent=$("bb").hidden?"Показать":"Скрыть"}}
+function recount(){const n=N.length;K=new Int32Array(n);const sx=new Float64Array(n),sy=new Float64Array(n);
+ for(let p=0,x=0,yy=0;p<own.length;p++){const o=own[p];if(o>=0){K[o]++;sx[o]+=x;sy[o]+=yy}if(++x===W){x=0;yy++}}
+ CX=sx.map((v,i)=>K[i]?v/K[i]:0);CY=sy.map((v,i)=>K[i]?v/K[i]:0);cap=null;
+ if(me!=null&&K[me]){let bp=0,bd=1e18;for(let p=0;p<own.length;p++)if(own[p]===me){const e=(p%W-CX[me])**2+((p/W|0)-CY[me])**2;if(e<bd){bd=e;bp=p}}cap=[bp%W,bp/W|0]}}
+function adj(){const a=N.map(()=>new Set());for(let p=0;p<own.length;p++){const o=own[p];if(o<0)continue;const r=(p+1)%W?own[p+1]:-1,d=own[p+W];if(r>=0&&r!==o){a[o].add(r);a[r].add(o)}if(d>=0&&d!==o){a[o].add(d);a[d].add(o)}}return a}
+function moveShare(a,b,pct){const n=own.length;let tot=0;for(let p=0;p<n;p++)if(own[p]===a)tot++;if(!tot)return 0;
+ const dist=new Int32Array(n).fill(-1),qu=new Int32Array(n);let h=0,t=0;for(let p=0;p<n;p++)if(own[p]===b){dist[p]=0;qu[t++]=p}if(!t)return 0;
+ while(h<t){const p=qu[h++],x=p%W,v=dist[p]+1;if(x>0&&dist[p-1]<0){dist[p-1]=v;qu[t++]=p-1}if(x<W-1&&dist[p+1]<0){dist[p+1]=v;qu[t++]=p+1}if(p>=W&&dist[p-W]<0){dist[p-W]=v;qu[t++]=p-W}if(p+W<n&&dist[p+W]<0){dist[p+W]=v;qu[t++]=p+W}}
+ const k=Math.max(1,Math.round(tot*pct/100)),hs=new Int32Array(W+H+4);for(let p=0;p<n;p++)if(own[p]===a)hs[dist[p]]++;
+ let c=0,th=0;for(;th<hs.length;th++){if(c+hs[th]>=k)break;c+=hs[th]}let rem=k-c;
+ for(let p=0;p<n;p++)if(own[p]===a){const d=dist[p];if(d<th||(d===th&&rem-->0))own[p]=b}
+ return Math.round(k/tot*100)}
+function applyTr(list){const out=[];for(const t of Array.isArray(list)?list:[]){const a=find(t.from),b=find(t.to);if(a==null||b==null||a===b)continue;const pc=moveShare(a,b,Math.max(1,Math.min(100,parseFloat(t.share)||5)));if(pc)out.push(`${N[a].name} → ${N[b].name}: ${pc}% территории${t.why?" — "+t.why:""}`)}return out}
+function reset(){own.set(own0);$("lb").hidden=false;me=null;sel=null;y=scn.y;m=scn.m;log=[];hist=[];chat=[];V.x=W/2;V.y=H/2;V.s=0;clampV();render()}
+function clampV(){const cw=cv.width,ch=cv.height,sm=cw/W;V.s=Math.max(sm,Math.min(V.s||sm,Math.max(14,sm*8)));const hw=cw/2/V.s,hh=ch/2/V.s;V.x=2*hw>=W?W/2:Math.max(hw,Math.min(W-hw,V.x));V.y=2*hh>=H?H/2:Math.max(hh,Math.min(H-hh,V.y))}
+function size(){if(!vp.clientWidth||!own)return;RR=Math.min(2,window.devicePixelRatio||1);cv.width=Math.round(vp.clientWidth*RR);cv.height=Math.round(vp.clientHeight*RR);clampV();draw()}
+function redraw(){if(!rq)rq=requestAnimationFrame(()=>{rq=0;clampV();vp.style.touchAction=V.s>cv.width/W*1.05?"none":"pan-y";draw()})}
+function draw(){
+ const cw=cv.width,ch=cv.height;if(!cw||!ch||!own)return;
+ if(!img||img.width!==cw||img.height!==ch)img=ctx.createImageData(cw,ch);
+ const D=img.data,col=new Int32Array(cw+2),row=new Int32Array(ch+2);
+ for(let i=0;i<cw+2;i++){const c=Math.floor(V.x+(i-1-cw/2)/V.s);col[i]=c<0||c>=W?-1:c}
+ for(let j=0;j<ch+2;j++){const r=Math.floor(V.y+(j-1-ch/2)/V.s);row[j]=r<0||r>=H?-1:r*W}
+ let q=0;
+ for(let j=1;j<=ch;j++){const ro=row[j],ru=row[j-1],rd=row[j+1];
+  for(let i=1;i<=cw;i++,q+=4){const c=col[i],l=col[i-1],r=col[i+1],o=ro<0||c<0?-1:own[ro+c];let R,G,B;
+   if(o<0){R=SC[0];G=SC[1];B=SC[2]}else{
+    const oL=l<0?-1:own[ro+l],oR=r<0?-1:own[ro+r],oU=ru<0?-1:own[ru+c],oD=rd<0?-1:own[rd+c],p=pal[o];R=p[0];G=p[1];B=p[2];
+    if(oR!==o||oD!==o||oL<0||oU<0){R*=.5;G*=.5;B*=.5}else if(o===sel){R+=(255-R)*.45;G+=(255-G)*.45;B+=(255-B)*.45}}
+   D[q]=R;D[q+1]=G;D[q+2]=B;D[q+3]=255}}
+ ctx.putImageData(img,0,0);labels()}
+function labels(){const cw=cv.width,ch=cv.height,R=RR;ctx.textAlign="center";ctx.textBaseline="middle";ctx.lineJoin="round";let n=0;
+ for(const t of N){const k=K[t.i];if(!k)continue;const px=cw/2+(CX[t.i]+.5-V.x)*V.s,py=ch/2+(CY[t.i]+.5-V.y)*V.s;if(px<0||py<0||px>cw||py>ch)continue;
+  const dm=Math.sqrt(k)*V.s,fs=Math.max(9*R,Math.min(15*R,dm*.14));ctx.font=`600 ${fs}px system-ui,sans-serif`;if(dm*.9<ctx.measureText(t.name).width)continue;
+  ctx.lineWidth=3*R;ctx.strokeStyle="rgba(255,255,255,.75)";ctx.strokeText(t.name,px,py);ctx.fillStyle="#1b1b1b";ctx.fillText(t.name,px,py);if(++n>90)break}
+ if(cap){const px=cw/2+(cap[0]+.5-V.x)*V.s,py=ch/2+(cap[1]+.5-V.y)*V.s;ctx.beginPath();ctx.arc(px,py,6*R,0,7);ctx.fillStyle="#fff";ctx.fill();ctx.lineWidth=2*R;ctx.strokeStyle="#111";ctx.stroke()}}
+function zoomAt(ax,ay,f){const cw=cv.width,ch=cv.height,wx=V.x+(ax-cw/2)/V.s,wy=V.y+(ay-ch/2)/V.s;V.s*=f;clampV();V.x=wx-(ax-cw/2)/V.s;V.y=wy-(ay-ch/2)/V.s;redraw()}
+function focus(i){let x0=W,x1=0,y0=H,y1=0;for(let p=0,x=0,yy=0;p<own.length;p++){if(own[p]===i){if(x<x0)x0=x;if(x>x1)x1=x;if(yy<y0)y0=yy;if(yy>y1)y1=yy}if(++x===W){x=0;yy++}}if(x1<x0)return;
+ V.s=Math.min(.75*cv.width/(x1-x0+6),.75*cv.height/(y1-y0+6));V.x=(x0+x1)/2;V.y=(y0+y1)/2;redraw()}
+function pickAt(e){const r=cv.getBoundingClientRect(),x=Math.floor(V.x+((e.clientX-r.left)*RR-cv.width/2)/V.s),yy=Math.floor(V.y+((e.clientY-r.top)*RR-cv.height/2)/V.s),rad=Math.min(40,Math.ceil(10*RR/V.s));let o=-1;
+ for(let d=0;d<=rad&&o<0;d++)for(let dy=-d;dy<=d&&o<0;dy++)for(let dx=-d;dx<=d;dx++){if(Math.max(Math.abs(dx),Math.abs(dy))!==d)continue;const a=x+dx,b=yy+dy;if(a>=0&&b>=0&&a<W&&b<H&&own[b*W+a]>=0){o=own[b*W+a];break}}
+ if(o>=0){sel=o;render()}}
+const Pm=new Map();let moved=0;
+vp.addEventListener("pointerdown",e=>{Pm.set(e.pointerId,{x:e.clientX,y:e.clientY});moved=0;vp.setPointerCapture(e.pointerId)});
+vp.addEventListener("pointermove",e=>{const p=Pm.get(e.pointerId);if(!p)return;const dx=e.clientX-p.x,dy=e.clientY-p.y;
+ if(Pm.size===1){moved+=Math.abs(dx)+Math.abs(dy);V.x-=dx*RR/V.s;V.y-=dy*RR/V.s;redraw()}
+ else if(Pm.size===2){const o=[...Pm.entries()].find(([id])=>id!==e.pointerId)[1],d0=Math.hypot(p.x-o.x,p.y-o.y)||1,d1=Math.hypot(e.clientX-o.x,e.clientY-o.y),r=vp.getBoundingClientRect();moved+=9;zoomAt(((e.clientX+o.x)/2-r.left)*RR,((e.clientY+o.y)/2-r.top)*RR,d1/d0)}
+ p.x=e.clientX;p.y=e.clientY});
+vp.addEventListener("pointerup",e=>{if(Pm.size===1&&moved<8)pickAt(e);Pm.delete(e.pointerId)});
+vp.addEventListener("pointercancel",e=>Pm.delete(e.pointerId));
+vp.addEventListener("wheel",e=>{e.preventDefault();const r=vp.getBoundingClientRect();zoomAt((e.clientX-r.left)*RR,(e.clientY-r.top)*RR,e.deltaY<0?1.25:.8)},{passive:false});
+document.querySelector(".zb").addEventListener("pointerdown",e=>e.stopPropagation());
+$("zi").onclick=()=>zoomAt(cv.width/2,cv.height/2,1.7);$("zo").onclick=()=>zoomAt(cv.width/2,cv.height/2,1/1.7);
+function render(){
+ recount();const k=K,tot=k.reduce((a,b)=>a+b,0),A=adj(),dead=me!=null&&!k[me];
+ $("date").textContent=dateStr();
+ if(sel==null)$("info").innerHTML='<span class="mu">Нажмите на страну на карте или найдите её в списке, затем выберите, за кого играть. Карту можно приближать кнопками +/−, щипком и двигать пальцем.</span>';
+ else{const n=N[sel],nb=[...A[sel]].map(j=>N[j].name).slice(0,8).join(", ");
+  $("info").innerHTML=`<div class="row"><span class="dot" style="background:${rgb(sel)}"></span><b>${esc(n.name)}</b>${sel===me?'<span class="tag">вы</span>':""}</div><div class="mu">${pc(k[sel],tot)}% суши</div><div class="mu">Соседи: ${esc(nb)||"—"}</div>`+(me==null&&k[sel]?`<button class="btn" id="play">Играть за ${esc(n.name)}</button>`:"");
+  const p=$("play");if(p)p.onclick=()=>{me=sel;share0=k[me]/tot*100;chat=[];$("lb").hidden=true;render()}}
+ if(dead)$("info").innerHTML+='<p><b>Ваше государство прекратило существование.</b> Нажмите «Сюжеты».</p>';
+ $("ctl").hidden=me==null||dead;$("adv").hidden=me==null||dead;
+ $("chips").innerHTML=sel!=null&&sel!==me?["Объявить войну","Предложить союз","Торговое соглашение","Ввести санкции"].map(v=>`<button class="sm" data-v="${v}">${v}: ${esc(N[sel].name)}</button>`).join(""):'<span class="mu">Выберите чужую страну — появятся быстрые приказы.</span>';
+ $("lt").textContent=me==null?"Выберите страну":"Страны";$("lh").textContent=$("lb").hidden?"Показать":"Скрыть";$("ah").textContent=$("ab").hidden?"Показать":"Скрыть";
+ const f=$("q").value.trim().toLowerCase(),L=N.filter(n=>k[n.i]&&(!f||n.name.toLowerCase().includes(f))).sort((a,b)=>k[b.i]-k[a.i]);
+ $("list").innerHTML=L.slice(0,f?200:50).map(n=>`<button class="it${n.i===sel?" on":""}" data-i="${n.i}"><span class="dot" style="background:${rgb(n.i)}"></span>${esc(n.name)}<small>${pc(k[n.i],tot)}%</small></button>`).join("")+(!f&&L.length>50?'<span class="mu">…ещё '+(L.length-50)+' — используйте поиск</span>':"");
+ $("log").innerHTML=log.map(e=>`<article class="card"><div class="mu">${esc(e.d)}</div><h3>${esc(e.h)}</h3><p>${esc(e.s)}</p>${e.ev.length?"<ul>"+e.ev.map(x=>"<li>"+esc(x)+"</li>").join("")+"</ul>":""}${e.tr.length?'<div class="tr">'+e.tr.map(x=>"<div>⚑ "+esc(x)+"</div>").join("")+"</div>":""}</article>`).join("");
+ renderChat();draw()}
+function renderChat(){$("am").innerHTML=chat.map(c=>`<div class="m ${c.r}">${esc(c.t).replace(/«([^»]{3,140})»/g,(_,t)=>`<button class="sm ins" data-t="${t}">«${t}»</button>`).replace(/\n/g,"<br>")}</div>`).join("")||'<span class="mu">Спросите совет или попросите сводку игры. Приказы из ответов можно вставить в поле одним нажатием.</span>';$("am").scrollTop=1e6}
+function adCtx(){const A=adj(),k=K,tot=k.reduce((a,b)=>a+b,0),sh=i=>pc(k[i],tot)+"%",rank=N.filter(n=>k[n.i]>k[me]).length+1;
+ const nb=[...A[me]].sort((a,b)=>k[b]-k[a]).slice(0,8).map(j=>N[j].name+" "+sh(j)).join(", ")||"нет сухопутных соседей";
+ const top=N.filter(n=>k[n.i]).sort((a,b)=>k[b.i]-k[a.i]).slice(0,6).map(n=>n.name+" "+sh(n.i)).join(", ");
+ const full=log.slice().reverse().map(e=>`${e.d}: ${e.h}. ${e.s} ${e.tr.join("; ")}`.slice(0,320)).join("\n")||"(ходов ещё не было) "+scn.brief;
+ return `Сюжет: «${scn.t}». ${scn.ctx} Сейчас: ${dateStr()}. Игрок управляет страной «${N[me].name}»: ${sh(me)} суши (в начале игры ${share0.toFixed(1)}%), ${rank}-е место по территории. Соседи: ${nb}. Крупнейшие державы: ${top}.\nХронология игры:\n${full}`}
+function offAdv(kind){const A=adj(),k=K,tot=k.reduce((a,b)=>a+b,0),nb=[...A[me]].sort((a,b)=>k[b]-k[a]);
+ if(kind==="sum")return log.length?`ИИ недоступен, вот краткая сводка. Ходов: ${log.length}. Доля суши: было ${share0.toFixed(1)}%, стало ${pc(k[me],tot)}%.\n`+log.slice().reverse().map(e=>`${e.d}: ${e.h}`).join("\n"):"Ходов ещё не было — сводить пока нечего.";
+ if(kind==="ask")return "ИИ сейчас недоступен, поэтому на свободные вопросы я не отвечаю. Нажмите «Что делать?» — дам базовый совет.";
+ if(!nb.length)return "У вас нет сухопутных соседей — действуйте через дипломатию и торговлю.";
+ const s=N[nb[0]].name,w=N[nb[nb.length-1]].name,t=N[nb[Math.min(1,nb.length-1)]].name;
+ return `ИИ недоступен, базовый совет: у вас ${pc(k[me],tot)}% суши. Сильнейший сосед — ${s}, слабейший — ${w}.\n1. Безопасность: «Предложить союз: ${s}»\n2. Экономика: «Торговое соглашение: ${t}»\n3. Давление: «Ввести санкции: ${w}»`}
+async function adv(kind,q){if(busy||me==null)return;busy=true;
+ chat.push({r:"u",t:kind==="tip"?"Что мне делать?":kind==="sum"?"Дай сводку игры за всё время":q},{r:"a",t:"Советник думает…"});renderChat();
+ const ins=kind==="tip"?"Оцени положение страны игрока и дай ровно 3 конкретных совета. К каждому — готовый приказ в кавычках «…», который игрок может вставить в поле приказов. До 130 слов.":kind==="sum"?"Сделай сводку всей игры за всё время: хронология по ходам (сжато), как изменилась территория игрока, кто из держав усилился или ослаб, главные риски дальше. До 200 слов.":"Ответь на вопрос игрока как советник, опираясь на положение дел. До 130 слов. Вопрос: "+q;
+ let txt=null;try{if(ai){const res=await ai(`Ты — личный советник правителя в игре альтернативной истории. Отвечай по-русски, без вступлений.\n${adCtx()}\n\n${ins}`,{cache:false});txt=String(res.text||"").trim()||null}}catch(e){}
+ chat.pop();chat.push({r:"a",t:txt||offAdv(kind)});busy=false;renderChat()}
+$("a1").onclick=()=>adv("tip");$("a2").onclick=()=>adv("sum");
+const ask2=()=>{const q=$("aq").value.trim();if(q){$("aq").value="";adv("ask",q)}};$("as").onclick=ask2;$("aq").onkeydown=e=>{if(e.key==="Enter")ask2()};
+$("ah").onclick=()=>{$("ab").hidden=!$("ab").hidden;$("ah").textContent=$("ab").hidden?"Показать":"Скрыть"};
+$("am").onclick=e=>{const b=e.target.closest(".ins");if(b){const t=$("ord");t.value+=(t.value&&!t.value.endsWith("\n")?"\n":"")+b.dataset.t+"\n"}};
+$("q").oninput=render;$("lh").onclick=()=>{$("lb").hidden=!$("lb").hidden;render()};
+$("list").onclick=e=>{const b=e.target.closest("button");if(b){sel=+b.dataset.i;focus(sel);render()}};
+$("chips").onclick=e=>{const b=e.target.closest("button");if(b){const t=$("ord");t.value+=(t.value&&!t.value.endsWith("\n")?"\n":"")+b.dataset.v+": "+N[sel].name+"\n"}};
+function offline(mo){const A=adj(),k=cnt(),live=N.filter(n=>k[n.i]&&A[n.i].size),ev=[],transfers=[],R=a=>a[Math.random()*a.length|0];
+ for(let t=0;t<Math.max(1,mo/3|0)+1;t++){const a=R(live),b=N[R([...A[a.i]])];
+  if(Math.random()<.5){const w=Math.random()<k[a.i]/(k[a.i]+k[b.i])?[a,b]:[b,a];transfers.push({from:w[1].name,to:w[0].name,share:3+Math.random()*12|0,why:"приграничный конфликт"});ev.push(`${w[0].name} берёт верх над ${w[1].name} в приграничных боях`)}
+  else ev.push(`${a.name} и ${b.name} подписывают торговое соглашение`)}
+ return{headline:"Дипломатия и пограничные стычки",summary:"Мир живёт своей жизнью: державы проверяют друг друга на прочность.",events:ev,transfers}}
+async function ask(mo,ord){const A=adj(),k=cnt();
+ const world=N.filter(n=>k[n.i]).sort((a,b)=>k[b.i]-k[a.i]).map(n=>`${n.name}: ${pc(k[n.i],k.reduce((a,b)=>a+b,0))}% суши; соседи: ${[...A[n.i]].slice(0,5).map(j=>N[j].name).join(", ")}`).join("\n");
+ const res=await ai(`Ты — движок игры в альтернативную историю (как Pax Historia). Отвечай по-русски.
+Сюжет: «${scn.t}». ${scn.ctx}
+Сейчас: ${dateStr()}. Игрок управляет страной «${N[me].name}». Ход длится ${mo} мес.
+Приказы игрока:
+${ord||"(нет приказов)"}
+
+Карта мира (страна: доля суши; соседи):
+${world}
+
+Недавняя история:
+${hist.slice(-6).join("\n")||"(начало игры) "+scn.brief}
+
+Смоделируй ход реалистично и драматично: другие страны действуют сами в своих интересах, возможны войны, союзы, перевороты, кризисы. Успех приказов зависит от силы и правдоподобия, игрок не всемогущ. Не выдумывай страны, которых нет в списке. Соответствуй эпохе сюжета: технологии, лидеры, реальные предпосылки.
+Верни ТОЛЬКО JSON без пояснений и без markdown:
+{"headline":"короткий заголовок","summary":"3-4 предложения о главном","events":["2-4 коротких события"],"transfers":[{"from":"страна-проигравший","to":"страна-получатель","share":10,"why":"причина"}]}
+transfers — только реальные изменения границ (завоевание, отделение, присоединение), от 0 до 4. share — какая доля территории страны from в процентах (1–100; 100 — полная аннексия) переходит к to; обычно 3–30. Имена строго из списка.`,{cache:false});
+ const t=res.text||"";return JSON.parse(t.slice(t.indexOf("{"),t.lastIndexOf("}")+1))}
+$("go").onclick=async function(){
+ const b=this,mo=+$("per").value,ord=$("ord").value.trim();b.disabled=true;b.textContent="Мир живёт…";
+ let r=null,note="";
+ if(ai){try{r=await ask(mo,ord)}catch(e){note=e&&e.code==="rate_limited"?"Лимит запросов ИИ — ход просчитан упрощённо.":"ИИ не ответил — ход просчитан упрощённо.";if(e&&e.code==="not_granted"){ai=null;st()}}}
+ if(!r){r=offline(mo);if(!ai&&!note)note="ИИ выключен — упрощённая симуляция, приказы не учитываются."}
+ const tr=applyTr(r.transfers),e={d:dateStr(),h:String(r.headline||"Итоги хода"),s:String(r.summary||"")+(note?" ["+note+"]":""),ev:(Array.isArray(r.events)?r.events:[]).slice(0,5).map(String),tr};
+ m+=mo;y+=Math.floor(m/12);m%=12;
+ log.unshift(e);hist.push((e.d+": "+e.h+". "+e.s).slice(0,300));
+ $("ord").value="";b.disabled=false;b.textContent="Завершить ход";render()};
+$("new").onclick=function(){if(this.dataset.s){delete this.dataset.s;this.textContent="Сюжеты";menu()}else{this.dataset.s=1;this.textContent="Точно?";setTimeout(()=>{delete this.dataset.s;this.textContent="Сюжеты"},3000)}};
+function st(){$("ai").textContent=ai?"ИИ: вкл":"ИИ: выкл"}
+st();
+(async()=>{try{const c=window.claude;ai=c&&c.use?await c.use("sample"):null}catch(e){ai=null}st()})();
+boot();
+</script></body></html>
